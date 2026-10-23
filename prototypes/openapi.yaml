@@ -1,0 +1,566 @@
+openapi: 3.1.0
+info:
+  title: AgentFlow — Proposed API Contract
+  version: 0.1.0-design
+  description: >-
+    Analysis/design prototype for prob-period-1. No server is implemented or
+    deployed. Examples are illustrative and synthetic. Authorization, tenant
+    isolation, validation and action execution are planned requirements.
+servers:
+  - url: https://agentflow.example.invalid
+    description: Reserved placeholder; not a running endpoint.
+security:
+  - bearerAuth: []
+tags:
+  - name: Authentication
+  - name: Assistants
+  - name: Conversations
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Proposed basic process health, not dependency readiness.
+      security: []
+      responses:
+        '200':
+          description: Illustrative healthy process response.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                additionalProperties: false
+                properties:
+                  status:
+                    type: string
+                    const: ok
+  /auth/login:
+    post:
+      tags: [Authentication]
+      operationId: login
+      summary: Authenticate an operator; account provisioning is future work.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              additionalProperties: false
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: operator@example.invalid
+                password:
+                  type: string
+                  minLength: 1
+                  writeOnly: true
+      responses:
+        '200':
+          description: Proposed token response; no real token is supplied.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [access_token, token_type, expires_in]
+                additionalProperties: false
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    const: Bearer
+                  expires_in:
+                    type: integer
+                    minimum: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /assistants:
+    get:
+      tags: [Assistants]
+      operationId: listAssistants
+      summary: List assistants visible to the authenticated identity.
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Ownership-scoped, cursor-paginated assistant list.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Assistant'
+                  next_cursor:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags: [Assistants]
+      operationId: createAssistant
+      summary: Create an assistant; ownership derives from authenticated identity.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssistantInput'
+      responses:
+        '201':
+          description: Created assistant configuration, not an activated live integration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assistant'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /assistants/{assistantId}:
+    parameters:
+      - $ref: '#/components/parameters/AssistantId'
+    get:
+      tags: [Assistants]
+      operationId: getAssistant
+      summary: Read an owned or explicitly authorized assistant.
+      responses:
+        '200':
+          description: Assistant configuration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assistant'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [Assistants]
+      operationId: updateAssistant
+      summary: Update authorized configuration; tool changes require policy validation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 120
+                instructions:
+                  type: string
+                  minLength: 1
+                  maxLength: 8000
+                allowed_tools:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    $ref: '#/components/schemas/ToolName'
+                require_approval_for_writes:
+                  type: boolean
+                  description: Changing this flag requires policy-authorized operator permission.
+      responses:
+        '200':
+          description: Updated assistant configuration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assistant'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /conversations:
+    get:
+      tags: [Conversations]
+      operationId: listConversations
+      summary: List conversations visible to the authenticated identity.
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Scoped conversation page; cursor ordering must be stable.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Conversation'
+                  next_cursor:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags: [Conversations]
+      operationId: createConversation
+      summary: Start conversation state for an authorized assistant.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [assistant_id, requester_reference]
+              additionalProperties: false
+              properties:
+                assistant_id:
+                  type: string
+                  format: uuid
+                requester_reference:
+                  type: string
+                  minLength: 1
+                  maxLength: 128
+                  description: Pseudonymous reference; it does not grant data access.
+      responses:
+        '201':
+          description: Conversation created; no external action has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /conversations/{conversationId}:
+    parameters:
+      - $ref: '#/components/parameters/ConversationId'
+    get:
+      tags: [Conversations]
+      operationId: getConversation
+      summary: Read authorized conversation and actual recorded action outcomes.
+      responses:
+        '200':
+          description: Conversation state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /conversations/{conversationId}/messages:
+    parameters:
+      - $ref: '#/components/parameters/ConversationId'
+    post:
+      tags: [Conversations]
+      operationId: submitMessage
+      summary: Submit a turn with bounded model/tool processing.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              additionalProperties: false
+              properties:
+                text:
+                  type: string
+                  minLength: 1
+                  maxLength: 8000
+      responses:
+        '200':
+          description: Proposed turn response; action status distinguishes approval from completion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TurnResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+  /conversations/{conversationId}/actions/{actionId}/decision:
+    parameters:
+      - $ref: '#/components/parameters/ConversationId'
+      - name: actionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags: [Conversations]
+      operationId: decideAction
+      summary: Approve or reject a pending action as an authorized operator.
+      description: >-
+        Approval is not execution success. The action must belong to the scoped
+        conversation and be pending approval; incompatible decisions return 409.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              additionalProperties: false
+              properties:
+                decision:
+                  type: string
+                  enum: [approve, reject]
+                reason:
+                  type: string
+                  maxLength: 1000
+      responses:
+        '202':
+          description: Approval recorded; execution may follow and must be read separately.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Action'
+        '200':
+          description: Rejection recorded; no action should be executed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Action'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Proposed scheme; no authentication implementation is included.
+  parameters:
+    AssistantId:
+      name: assistantId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ConversationId:
+      name: conversationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Same scoped key and payload replays the same logical outcome; conflicting payload returns 409.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 128
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+        maxLength: 1024
+  schemas:
+    ToolName:
+      type: string
+      enum: [check_availability, create_appointment, summarize_conversation]
+    AssistantInput:
+      type: object
+      required: [name, instructions, allowed_tools, require_approval_for_writes]
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        instructions:
+          type: string
+          minLength: 1
+          maxLength: 8000
+        allowed_tools:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/ToolName'
+        require_approval_for_writes:
+          type: boolean
+          default: true
+          description: False is allowed only by an explicit validated operator policy.
+    Assistant:
+      type: object
+      required: [id, name, instructions, allowed_tools, require_approval_for_writes]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        instructions:
+          type: string
+        allowed_tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolName'
+        require_approval_for_writes:
+          type: boolean
+    ConversationStatus:
+      type: string
+      enum: [open, awaiting_input, pending_approval, completed, failed]
+    Action:
+      type: object
+      required: [id, tool, status, summary]
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        tool:
+          $ref: '#/components/schemas/ToolName'
+        status:
+          type: string
+          enum: [pending_approval, approved, executing, reconciling, succeeded, failed, rejected]
+        summary:
+          type: string
+          description: Sanitized action description; never includes provider credentials.
+    Message:
+      type: object
+      required: [role, text, created_at]
+      properties:
+        role:
+          type: string
+          enum: [requester, assistant, operator]
+        text:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Conversation:
+      type: object
+      required: [id, assistant_id, status, messages, actions]
+      properties:
+        id:
+          type: string
+          format: uuid
+        assistant_id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/ConversationStatus'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+    TurnResult:
+      type: object
+      required: [conversation_id, status, assistant_message, actions]
+      additionalProperties: false
+      properties:
+        conversation_id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/ConversationStatus'
+        assistant_message:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+    Error:
+      type: object
+      required: [code, message, correlation_id]
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        correlation_id:
+          type: string
+  responses:
+    BadRequest:
+      description: Invalid request; no external action performed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid or expired authentication.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Authenticated identity lacks the required operation permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Object does not exist or is outside the caller's authorized scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Incompatible action state or idempotency key reused with a different payload.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unavailable:
+      description: Dependency unavailable or processing deadline reached; inspect action state before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

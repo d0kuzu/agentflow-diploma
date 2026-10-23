@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="1100" viewBox="0 0 1560 1100" role="img" aria-labelledby="title desc">
+  <title id="title">AgentFlow proposed UML use-case diagram</title>
+  <desc id="desc">Eight planned use cases for requester and process operator, with an external integration actor. Clarification and human approval extend request handling. Appointment confirmation includes availability. Operator operations include authentication.</desc>
+  <defs>
+    <marker id="openarrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L11 6L1 11" fill="none" stroke="#475569" stroke-width="1.6"/></marker>
+    <style>text{font-family:Arial,Helvetica,sans-serif;fill:#172033}.title{font-size:30px;font-weight:700}.subtitle{font-size:18px;fill:#64748b}.label{font-size:19px;font-weight:700}.id{font-size:16px;fill:#2563eb}.small{font-size:15px;fill:#475569}.case{fill:#edf5ff;stroke:#3b82f6;stroke-width:1.7}.assoc{fill:none;stroke:#94a3b8;stroke-width:1.8}.dependency{fill:none;stroke:#475569;stroke-width:1.8;stroke-dasharray:7 5;marker-end:url(#openarrow)}.actor{fill:none;stroke:#475569;stroke-width:2.5}</style>
+  </defs>
+  <rect width="1560" height="1100" fill="#f7f9fc"/>
+  <text x="45" y="58" class="title">AgentFlow — UML use cases</text>
+  <text x="45" y="91" class="subtitle">Proposed requirements view · All use cases planned · prob-period-1</text>
+  <rect x="260" y="140" width="1050" height="825" rx="12" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="285" y="172" class="small">AgentFlow system boundary — no implemented application in this baseline</text>
+  <!-- Actor associations are deliberately routed independently of UML dependencies. -->
+  <path d="M127 350L335 280" class="assoc"/>
+  <path d="M127 350H200V220H900V235" class="assoc"/>
+  <path d="M127 350H180V575H1090V525" class="assoc"/>
+  <path d="M127 350L565 480" class="assoc"/>
+  <path d="M127 800H220V710H335" class="assoc"/>
+  <path d="M127 800H235V790H800V755" class="assoc"/>
+  <path d="M235 790H1110V755" class="assoc"/>
+  <path d="M127 800H220V880H665" class="assoc"/>
+  <path d="M1415 430H1360V480H1225" class="assoc"/>
+  <path d="M1415 430H1380V610H700V525" class="assoc"/>
+  <!-- Use cases. -->
+  <ellipse cx="470" cy="280" rx="135" ry="45" class="case"/>
+  <text x="470" y="271" text-anchor="middle" class="id">UC-01</text>
+  <text x="470" y="298" text-anchor="middle" class="label">Submit request</text>
+  <ellipse cx="900" cy="280" rx="135" ry="45" class="case"/>
+  <text x="900" y="271" text-anchor="middle" class="id">UC-02</text>
+  <text x="900" y="298" text-anchor="middle" class="label">Clarify request</text>
+  <ellipse cx="700" cy="480" rx="135" ry="45" class="case"/>
+  <text x="700" y="471" text-anchor="middle" class="id">UC-04</text>
+  <text x="700" y="498" text-anchor="middle" class="label">Confirm appointment</text>
+  <ellipse cx="1090" cy="480" rx="135" ry="45" class="case"/>
+  <text x="1090" y="471" text-anchor="middle" class="id">UC-03</text>
+  <text x="1090" y="498" text-anchor="middle" class="label">Check availability</text>
+  <ellipse cx="470" cy="710" rx="135" ry="45" class="case"/>
+  <text x="470" y="701" text-anchor="middle" class="id">UC-05</text>
+  <text x="470" y="728" text-anchor="middle" class="label">Configure assistant</text>
+  <ellipse cx="800" cy="710" rx="135" ry="45" class="case"/>
+  <text x="800" y="701" text-anchor="middle" class="id">UC-06</text>
+  <text x="800" y="728" text-anchor="middle" class="label">Review conversation</text>
+  <ellipse cx="1110" cy="710" rx="135" ry="45" class="case"/>
+  <text x="1110" y="701" text-anchor="middle" class="id">UC-08</text>
+  <text x="1110" y="728" text-anchor="middle" class="label">Approve escalation</text>
+  <ellipse cx="800" cy="880" rx="135" ry="45" class="case"/>
+  <text x="800" y="871" text-anchor="middle" class="id">UC-07</text>
+  <text x="800" y="898" text-anchor="middle" class="label">Authenticate</text>
+  <!-- UML include/extend dependencies. -->
+  <path d="M765 280H605" class="dependency"/>
+  <text x="685" y="262" text-anchor="middle" class="small">«extend»</text>
+  <text x="685" y="311" text-anchor="middle" class="small">[information incomplete]</text>
+  <path d="M835 480H955" class="dependency"/>
+  <text x="895" y="459" text-anchor="middle" class="small">«include»</text>
+  <path d="M470 755V850H699" class="dependency"/>
+  <rect x="492" y="811" width="92" height="22" fill="#fff"/>
+  <text x="538" y="828" text-anchor="middle" class="small">«include»</text>
+  <path d="M825 755V835" class="dependency"/>
+  <rect x="838" y="799" width="91" height="22" fill="#fff"/>
+  <text x="883" y="816" text-anchor="middle" class="small">«include»</text>
+  <path d="M1110 755V880H935" class="dependency"/>
+  <text x="1015" y="862" text-anchor="middle" class="small">«include»</text>
+  <path d="M1245 710H1275V201H470V235" class="dependency"/>
+  <rect x="1000" y="347" width="258" height="55" rx="5" fill="#fff4db"/>
+  <text x="1129" y="370" text-anchor="middle" class="small">«extend» UC-08 → UC-01</text>
+  <text x="1129" y="391" text-anchor="middle" class="small">[human decision required]</text>
+  <!-- UML actors. -->
+  <g class="actor"><circle cx="100" cy="305" r="17"/><path d="M100 322V374M73 347H127M100 374L77 408M100 374L123 408"/></g>
+  <text x="100" y="439" text-anchor="middle" class="label">Requester</text>
+  <g class="actor"><circle cx="100" cy="755" r="17"/><path d="M100 772V824M73 797H127M100 824L77 858M100 824L123 858"/></g>
+  <text x="100" y="890" text-anchor="middle" class="label">Process</text>
+  <text x="100" y="915" text-anchor="middle" class="label">operator</text>
+  <g class="actor"><circle cx="1442" cy="385" r="17"/><path d="M1442 402V454M1415 427H1469M1442 454L1419 488M1442 454L1465 488"/></g>
+  <text x="1442" y="523" text-anchor="middle" class="label">External</text>
+  <text x="1442" y="548" text-anchor="middle" class="label">integration</text>
+  <line x1="45" y1="1005" x2="1515" y2="1005" stroke="#d9e0ea"/>
+  <text x="45" y="1035" class="small">Solid line: actor participation. Dashed arrow: UML include/extend dependency. Approval is distinct from action execution.</text>
+  <text x="45" y="1064" class="small">Editable source: use-case.puml · Editable vector: use-case.svg · Requirements and acceptance criteria: docs/06-requirements.md</text>
+</svg>

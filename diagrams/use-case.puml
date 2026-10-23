@@ -1,0 +1,33 @@
+@startuml
+title AgentFlow — proposed UML use cases (design only)
+left to right direction
+actor Requester
+actor "Process operator" as Operator
+actor "External integration" as Integration
+rectangle "AgentFlow system boundary — all use cases planned" {
+  usecase "UC-01\nSubmit request" as UC01
+  usecase "UC-02\nClarify request" as UC02
+  usecase "UC-03\nCheck availability" as UC03
+  usecase "UC-04\nConfirm appointment" as UC04
+  usecase "UC-05\nConfigure assistant" as UC05
+  usecase "UC-06\nReview conversation" as UC06
+  usecase "UC-07\nAuthenticate" as UC07
+  usecase "UC-08\nApprove escalation" as UC08
+}
+Requester -- UC01
+Requester -- UC02
+Requester -- UC03
+Requester -- UC04
+Operator -- UC05
+Operator -- UC06
+Operator -- UC07
+Operator -- UC08
+Integration -- UC03
+Integration -- UC04
+UC02 ..> UC01 : <<extend>>\n[information incomplete]
+UC04 ..> UC03 : <<include>>
+UC05 ..> UC07 : <<include>>
+UC06 ..> UC07 : <<include>>
+UC08 ..> UC07 : <<include>>
+UC08 ..> UC01 : <<extend>>\n[human decision required]
+@enduml

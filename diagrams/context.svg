@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600" role="img" aria-labelledby="context-title context-desc">
+  <title id="context-title">AgentFlow proposed system context</title>
+  <desc id="context-desc">Planned interactions between three human roles, the AgentFlow system containing four backend services and PostgreSQL, an external LLM provider, and optional calendar, messaging and business-record services. Design only; no application or deployed endpoint exists in this baseline.</desc>
+  <defs>
+    <marker id="context-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#60788f"/>
+    </marker>
+    <style>
+      text { font-family: 'Segoe UI', Arial, sans-serif; fill: #24384b; }
+      .heading { font-size: 26px; font-weight: 650; }
+      .subtitle { font-size: 14px; fill: #5b6d7d; }
+      .actor { fill: #f5f7f9; stroke: #a7b4c0; stroke-width: 1.5; }
+      .external { fill: #f5f7f9; stroke: #a7b4c0; stroke-width: 1.5; }
+      .node-label { font-size: 15px; font-weight: 600; text-anchor: middle; }
+      .flow { fill: none; stroke: #60788f; stroke-width: 1.6; marker-end: url(#context-arrow); }
+      .flow-label { font-size: 12px; fill: #435b70; text-anchor: middle; }
+      .small { font-size: 13px; fill: #5b6d7d; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="600" fill="#ffffff"/>
+  <text x="24" y="38" class="heading">AgentFlow — System Context</text>
+  <text x="24" y="64" class="subtitle">Proposed design · Initial research baseline (prob-period-1)</text>
+
+  <!-- Proposed system boundary; this is a context view, not a runtime topology. -->
+  <rect x="370" y="100" width="260" height="425" rx="16" fill="#f0f5fa" stroke="#7d98b3" stroke-width="1.8" stroke-dasharray="7 5"/>
+  <text x="500" y="127" class="small">SYSTEM BOUNDARY</text>
+  <rect x="390" y="213" width="220" height="197" rx="12" fill="#ffffff" stroke="#afc3d5" stroke-width="1.4"/>
+  <text x="500" y="264" text-anchor="middle" font-size="27" font-weight="650">AgentFlow</text>
+  <text x="500" y="291" text-anchor="middle" font-size="16" fill="#49677f">Proposed system</text>
+  <line x1="418" y1="311" x2="582" y2="311" stroke="#d6e1eb"/>
+  <text x="500" y="340" text-anchor="middle" font-size="14">Four backend services</text>
+  <text x="500" y="363" text-anchor="middle" font-size="14">and PostgreSQL</text>
+  <text x="500" y="492" class="small">All interactions are planned</text>
+
+  <!-- Human roles and their separate request/response flows. -->
+  <rect x="20" y="115" width="150" height="86" rx="11" class="actor"/>
+  <text x="95" y="163" class="node-label">Requester</text>
+  <path d="M170 146 H370" class="flow"/>
+  <text x="270" y="119" class="flow-label"><tspan x="270">Request and</tspan><tspan x="270" dy="15">clarification</tspan></text>
+  <path d="M370 179 H170" class="flow"/>
+  <text x="270" y="199" class="flow-label"><tspan x="270">Responses and</tspan><tspan x="270" dy="15">workflow status</tspan></text>
+
+  <rect x="20" y="267" width="150" height="86" rx="11" class="actor"/>
+  <text x="95" y="306" class="node-label"><tspan x="95">Process</tspan><tspan x="95" dy="20">operator</tspan></text>
+  <path d="M170 298 H370" class="flow"/>
+  <text x="270" y="271" class="flow-label"><tspan x="270">Configure, review</tspan><tspan x="270" dy="15">and approve</tspan></text>
+  <path d="M370 331 H170" class="flow"/>
+  <text x="270" y="351" class="flow-label"><tspan x="270">History and</tspan><tspan x="270" dy="15">action outcomes</tspan></text>
+
+  <rect x="20" y="419" width="150" height="86" rx="11" class="actor"/>
+  <text x="95" y="458" class="node-label"><tspan x="95">Research</tspan><tspan x="95" dy="20">evaluator</tspan></text>
+  <path d="M170 450 H370" class="flow"/>
+  <text x="270" y="438" class="flow-label">Synthetic scenarios</text>
+  <path d="M370 483 H170" class="flow"/>
+  <text x="270" y="505" class="flow-label">Evaluation records</text>
+
+  <!-- External providers; distinct horizontal lanes avoid crossing flows. -->
+  <rect x="830" y="179" width="150" height="86" rx="11" class="external"/>
+  <text x="905" y="218" class="node-label"><tspan x="905">External LLM</tspan><tspan x="905" dy="20">provider</tspan></text>
+  <path d="M630 206 H830" class="flow"/>
+  <text x="730" y="179" class="flow-label"><tspan x="730">Context and</tspan><tspan x="730" dy="15">tool schemas</tspan></text>
+  <path d="M830 239 H630" class="flow"/>
+  <text x="730" y="259" class="flow-label"><tspan x="730">Text and</tspan><tspan x="730" dy="15">tool proposals</tspan></text>
+
+  <rect x="830" y="359" width="150" height="109" rx="11" class="external"/>
+  <text x="905" y="383" text-anchor="middle" font-size="12" fill="#617589">OPTIONAL SERVICES</text>
+  <text x="905" y="407" class="node-label"><tspan x="905">Calendar, messaging</tspan><tspan x="905" dy="20">and business</tspan><tspan x="905" dy="20">records</tspan></text>
+  <path d="M630 389 H830" class="flow"/>
+  <text x="730" y="362" class="flow-label"><tspan x="730">Authorized reads</tspan><tspan x="730" dy="15">and writes</tspan></text>
+  <path d="M830 429 H630" class="flow"/>
+  <text x="730" y="449" class="flow-label"><tspan x="730">Data and</tspan><tspan x="730" dy="15">execution results</tspan></text>
+
+  <rect x="20" y="548" width="960" height="35" rx="7" fill="#f3f5f7"/>
+  <text x="500" y="571" text-anchor="middle" font-size="14" fill="#526679">Design only — no application or deployed endpoint</text>
+</svg>

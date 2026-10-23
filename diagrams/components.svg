@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="870" viewBox="0 0 1280 870" role="img" aria-labelledby="title description">
+  <title id="title">AgentFlow — proposed component architecture</title>
+  <desc id="description">Planned architecture with four application services: API gateway, authentication, AI orchestration, and database service. The database service uses PostgreSQL. API clients and an evaluation harness call the gateway. Orchestration calls an external LLM provider and optional integration APIs. No component is implemented in this milestone.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#526b88"/>
+    </marker>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #18324f; }
+      .title { font-size: 31px; font-weight: 700; }
+      .subtitle { font-size: 17px; fill: #576b80; }
+      .boundary { fill: #f6f9fd; stroke: #a9bdd5; stroke-width: 1.5; stroke-dasharray: 7 5; }
+      .boundary-label { font-size: 17px; font-weight: 700; fill: #456284; }
+      .service { fill: #eaf2fd; stroke: #7298c7; stroke-width: 1.7; }
+      .outside { fill: #ffffff; stroke: #a2b0bf; stroke-width: 1.7; }
+      .component-title { font-size: 20px; font-weight: 700; }
+      .detail { font-size: 15px; fill: #4f6379; }
+      .label { font-size: 15px; fill: #405975; }
+      .edge { fill: none; stroke: #526b88; stroke-width: 2; stroke-linejoin: round; marker-end: url(#arrow); }
+      .note { fill: #f2f5f8; stroke: #d1dbe5; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="870" fill="#ffffff"/>
+  <text x="35" y="55" class="title">AgentFlow · proposed component architecture</text>
+  <text x="35" y="87" class="subtitle">Research and design baseline · prob-period-1 · all components are planned</text>
+  <line x1="35" y1="112" x2="1245" y2="112" stroke="#dce5ee"/>
+
+  <rect x="290" y="150" width="955" height="490" rx="18" class="boundary"/>
+  <text x="315" y="182" class="boundary-label">AgentFlow boundary · four proposed application services + storage</text>
+
+  <!-- External callers. -->
+  <rect x="35" y="245" width="185" height="90" rx="12" class="outside"/>
+  <text x="127" y="282" text-anchor="middle" class="component-title">API client</text>
+  <text x="127" y="307" text-anchor="middle" class="detail">Requester / operator</text>
+
+  <rect x="35" y="445" width="185" height="100" rx="12" class="outside"/>
+  <text x="127" y="479" text-anchor="middle" class="component-title">Evaluation</text>
+  <text x="127" y="503" text-anchor="middle" class="component-title">harness</text>
+  <text x="127" y="527" text-anchor="middle" class="detail">Planned research tool</text>
+
+  <!-- Four application services. -->
+  <rect x="335" y="335" width="185" height="95" rx="12" class="service"/>
+  <text x="427" y="375" text-anchor="middle" class="component-title">API gateway</text>
+  <text x="427" y="403" text-anchor="middle" class="detail">Routing + identity</text>
+
+  <rect x="620" y="215" width="220" height="90" rx="12" class="service"/>
+  <text x="730" y="249" text-anchor="middle" class="component-title">Authentication</text>
+  <text x="730" y="276" text-anchor="middle" class="component-title">service</text>
+
+  <rect x="600" y="435" width="255" height="155" rx="12" class="service"/>
+  <text x="727" y="469" text-anchor="middle" class="component-title">AI orchestration</text>
+  <text x="727" y="494" text-anchor="middle" class="component-title">service</text>
+  <line x1="620" y1="509" x2="835" y2="509" stroke="#b9cde6"/>
+  <text x="727" y="533" text-anchor="middle" class="detail">Dialogue + policy / approval</text>
+  <text x="727" y="557" text-anchor="middle" class="detail">Tool dispatch + adapters</text>
+
+  <rect x="960" y="335" width="205" height="95" rx="12" class="service"/>
+  <text x="1062" y="373" text-anchor="middle" class="component-title">Database service</text>
+  <text x="1062" y="402" text-anchor="middle" class="detail">Scoped persistence</text>
+
+  <!-- Storage is inside the boundary, but is not an application service. -->
+  <path d="M 960 552 A 102.5 17 0 0 1 1165 552 L 1165 598 A 102.5 17 0 0 1 960 598 Z" fill="#ffffff" stroke="#7298c7" stroke-width="1.7"/>
+  <ellipse cx="1062.5" cy="552" rx="102.5" ry="17" fill="#edf3fa" stroke="#7298c7" stroke-width="1.7"/>
+  <text x="1062" y="590" text-anchor="middle" class="component-title">PostgreSQL</text>
+
+  <!-- Requests and service-to-service communication. -->
+  <path d="M 220 290 H 260 V 365 H 335" class="edge"/>
+  <text x="232" y="237" class="label">HTTP/JSON</text>
+  <path d="M 220 487 H 270 V 400 H 335" class="edge"/>
+  <text x="47" y="571" class="label">Synthetic requests</text>
+
+  <path d="M 520 365 H 565 V 260 H 620" class="edge"/>
+  <text x="399" y="248" class="label">Internal HTTP</text>
+  <path d="M 520 400 H 560 V 485 H 600" class="edge"/>
+  <text x="405" y="515" class="label">Internal HTTP</text>
+
+  <path d="M 840 260 H 1062 V 335" class="edge"/>
+  <text x="935" y="247" class="label">gRPC</text>
+  <path d="M 855 485 H 910 V 400 H 960" class="edge"/>
+  <text x="898" y="381" class="label">gRPC</text>
+  <path d="M 1062 430 V 535" class="edge"/>
+  <text x="1075" y="489" class="label">SQL</text>
+
+  <!-- External providers, separate from the application boundary. -->
+  <rect x="570" y="735" width="270" height="95" rx="12" class="outside"/>
+  <text x="705" y="772" text-anchor="middle" class="component-title">External LLM provider</text>
+  <text x="705" y="801" text-anchor="middle" class="detail">Text + tool-call proposals</text>
+  <rect x="945" y="735" width="300" height="95" rx="12" class="outside"/>
+  <text x="1095" y="772" text-anchor="middle" class="component-title">Optional integration APIs</text>
+  <text x="1095" y="801" text-anchor="middle" class="detail">Calendar, messaging, records</text>
+
+  <path d="M 705 590 V 735" class="edge"/>
+  <text x="719" y="697" class="label">Model API</text>
+  <path d="M 805 590 V 674 H 1095 V 735" class="edge"/>
+  <text x="879" y="702" class="label">Validated tool operations</text>
+
+  <rect x="35" y="735" width="450" height="95" rx="12" class="note"/>
+  <text x="53" y="763" font-size="16" font-weight="700">Design intent — not implemented controls</text>
+  <text x="53" y="788" class="detail">Policy, ownership, approval and idempotency</text>
+  <text x="53" y="811" class="detail">must be implemented and verified.</text>
+</svg>

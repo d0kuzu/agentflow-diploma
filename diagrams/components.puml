@@ -1,0 +1,29 @@
+@startuml
+title AgentFlow — proposed draft component diagram (no implementation)
+left to right direction
+actor "API client" as Client
+component "Evaluation harness\n(planned research tool)" as Harness
+rectangle "AgentFlow — four proposed application services" {
+  component "API gateway" as Gateway
+  component "Authentication service" as Auth
+  component "AI orchestration service\nDialogue + policy/approval\nTool dispatch + adapters" as AI
+  component "Database service" as DB
+  database "PostgreSQL" as PG
+}
+cloud "External LLM provider" as LLM
+cloud "Optional integration APIs" as Integrations
+Client --> Gateway : HTTP/JSON
+Harness --> Gateway : synthetic requests
+Gateway --> Auth : internal HTTP
+Gateway --> AI : internal HTTP
+Auth --> DB : gRPC
+AI --> DB : gRPC
+DB --> PG : SQL
+AI --> LLM : model API
+AI --> Integrations : validated tool operations
+note bottom of AI
+  All components and controls are planned.
+  Policy, ownership, approval and idempotency
+  must be implemented and verified.
+end note
+@enduml

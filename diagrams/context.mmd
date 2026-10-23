@@ -1,0 +1,13 @@
+flowchart LR
+  Requester[Requester] -->|Request and clarification| AF
+  Operator[Process operator] -->|Configure, review and approve| AF
+  Researcher[Research evaluator] -->|Synthetic scenarios| AF
+  AF[AgentFlow — proposed system\nFour backend services and PostgreSQL]
+  AF -->|Responses and workflow status| Requester
+  AF -->|History and action outcomes| Operator
+  AF -->|Evaluation records| Researcher
+  AF -->|Context and tool schemas| LLM[External LLM provider]
+  LLM -->|Text and tool proposals| AF
+  AF -->|Authorized reads and writes| Integrations[Optional calendar, messaging\nand business-record services]
+  Integrations -->|Data and execution results| AF
+  Note[Design only — no application or deployed endpoint]
