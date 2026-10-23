@@ -37,7 +37,7 @@ Editable UML source: [use-case.puml](../diagrams/use-case.puml); editable vector
 | UC-01 | Submit request | Requester | Accept text and initiate a conversation workflow. |
 | UC-02 | Clarify request | Requester | Ask for required missing information and preserve context. Extends UC-01 when information is incomplete. |
 | UC-03 | Check availability | Requester; external integration | Read a configured availability source and return valid candidate slots. |
-| UC-04 | Confirm appointment | Requester; external integration | Validate explicit confirmation and create one booking. Includes UC-03 as a required step in the target workflow. |
+| UC-04 | Confirm appointment | Requester; external integration | Validate explicit requester confirmation and create one booking only after any policy-required operator approval. Includes UC-03 as a required step in the target workflow. |
 | UC-05 | Configure assistant | Operator | Set the assistant's purpose, policy and allowed tools. Requires UC-07. |
 | UC-06 | Review conversation | Operator | Inspect authorized dialogue, summaries and action outcomes. Requires UC-07. |
 | UC-07 | Authenticate | Operator | Establish an authenticated session before protected operations. |
