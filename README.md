@@ -4,7 +4,7 @@
 
 AgentFlow is a diploma project investigating how an LLM agent can convert conversational requests into controlled business actions. The initial scope covers inquiry intake, collection of missing information, request classification, conversation summaries, and appointment requests in a synthetic service-business scenario.
 
-**Current stage:** research and design, `prob-period-1`, 23 October 2026. This version contains project documentation, architectural diagrams, an API design prototype, and an evaluation plan. Application implementation and empirical evaluation are planned. No running application or measured improvement is claimed for this release.
+**Current stage:** research and design. The refreshed `prob-period-1` submission snapshot, dated 23 October 2026, contains project documentation, architectural diagrams, an API design prototype, an evaluation plan, real YouTrack links, and the booking-approval clarification. See the [pre-submission updates](docs/12-submission.md#pre-submission-updates--23-october-2026). Application implementation and empirical evaluation are planned; no running application or measured improvement is claimed. Human review of [draft PR #1](https://github.com/d0kuzu/agentflow-diploma/pull/1) remains pending.
 
 ## Problem and intended users
 
@@ -47,7 +47,7 @@ The initial implementation will use synthetic records and mock external adapters
 | Supervisor review record | [Supervision](docs/11-supervisor-feedback.md) |
 | Exact submission and outstanding requirements | [Submission checklist](docs/12-submission.md) |
 
-**YouTrack:** not created yet. The [local task plan](docs/10-project-management.md#initial-task-plan) contains proposed owners, priorities, outcomes, deadlines, and acceptance criteria. It does not replace the required YouTrack project or real task links.
+**YouTrack:** [AgentFlow Diploma](https://agentflow-diploma.youtrack.cloud/projects/AFD), [task board](https://agentflow-diploma.youtrack.cloud/agiles/204-1/218-1). The project contains 16 real tasks with priorities, expected outcomes, acceptance criteria, and deadlines recorded in their descriptions. All tasks are assigned: eight to Dias (`admin`), four to Bekarys (`bekars.bihimbai2005`), and four to Nursultan (`thedids10`). Invitations have been sent to both teammates; acceptance and successful access still need confirmation. Supervisor account details and reviewer access setup remain pending. The tracker links are included in the refreshed pre-submission snapshot. See the [task register](docs/10-project-management.md#initial-task-plan) and [contribution process](CONTRIBUTING.md).
 
 ## Repository structure
 
